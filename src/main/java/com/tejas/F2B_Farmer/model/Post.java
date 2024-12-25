@@ -36,17 +36,17 @@ public class Post {
     private Double price;
     
     //** ** Image Logic to store in database
-    @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-    @JoinTable(name="post_images",
-    	joinColumns = {
-    			@JoinColumn(name="postid"),
-    			
-    	},
-    	
-    	inverseJoinColumns = {
-    			@JoinColumn (name="imageid")
-})
-    
+//    @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+//    @JoinTable(name="post_images",
+//    	joinColumns = {
+//    			@JoinColumn(name="postid"),
+//    			
+//    	},
+//    	
+//    	inverseJoinColumns = {
+//    			@JoinColumn (name="imageid")
+//})
+//    
     
     private Set<ImageModel> postImages; 
 
