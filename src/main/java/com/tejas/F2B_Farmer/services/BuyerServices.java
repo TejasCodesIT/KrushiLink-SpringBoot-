@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tejas.F2B_Farmer.model.Buyer;
+import com.tejas.F2B_Farmer.model.Farmer;
 import com.tejas.F2B_Farmer.repositories.BuyerRepository;
+import com.tejas.F2B_Farmer.request.ChangePassword;
 import com.tejas.F2B_Farmer.request.LoginRequest;
 
 
@@ -51,13 +53,25 @@ public class BuyerServices {
     
 
      // Update a buyer by ID
-     public String updatebuyer(Long id, Buyer newbuyerData) {
-        if (buyerRepository.existsById(id)) {
+     public Buyer updatebuyer(Long id, Buyer newbuyerData) {
+    	 
+    	 
+    	Buyer dbBuyer = buyerRepository.findById(id).get();
+    	 
+    	 
+        if (dbBuyer!=null) {
+        	
             newbuyerData.setBuyerid(id);  
+            newbuyerData.setPassword(dbBuyer.getPassword());
+            
             buyerRepository.save(newbuyerData); 
-            return "Farmer updated successfully";
+            
+            return newbuyerData;
+            
         } else {
-            return "Farmer not found";
+        	
+            return null;
+            
         }
     }
      
@@ -88,6 +102,43 @@ public class BuyerServices {
     	 
     	 
      }
+     
+     
+     
+     
+     public boolean changePassword(ChangePassword changePass,Long id) {
+    	 
+    	 
+     	Buyer buyer =  findbuyerById(id).get();
+     	
+     	String dbpassword = buyer.getPassword();
+     	
+     	String oldpass = changePass.getOldPassword();
+     	
+     	String newpassword = changePass.getNewPassword();
+     	
+     	System.err.println(newpassword+" new password");
+
+     	// Use .equals() to compare the strings
+     	if (dbpassword.equals(oldpass)) {
+     		
+     		buyer.setPassword(newpassword);
+     	    
+     	    System.err.println("From if statement");
+     	    
+     	    System.err.println("From farmer " + buyer.getPassword() );
+     	    
+     	    
+     	    addbuyer(buyer);
+     	    
+     	    
+     	    return true;
+     	} else {
+     	    return false;
+     	 
+     
+     
+ }}
      
      
     

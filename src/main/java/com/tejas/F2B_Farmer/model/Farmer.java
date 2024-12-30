@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -16,18 +17,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.val;
-
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class Farmer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long farmerid; // Ensure this matches in ContactUsRepo
+    private Long farmerid;  // Unique identifier for the farmer
 
     private String firstName;
     private String lastName;
@@ -39,22 +38,18 @@ public class Farmer {
     private Long phone;
 
     private String address;
-
-   
     private String password;
 
-    @OneToMany(mappedBy = "farmer",cascade = CascadeType.ALL)
-    @JsonManagedReference(value = "farmercontact")
-    
-    private List<ContactUs> queries;
-    
-    
-    
+    // Bi-directional relationship with Post
+    @OneToMany(mappedBy = "farmer", cascade = CascadeType.PERSIST)
+    @JsonManagedReference(value = "farmerpost")  // Ensures proper serialization
+    private List<Post> posts;  // A farmer can have many posts
+
+    // Bi-directional relationship with ContactUs
+    @OneToMany(mappedBy = "farmer", cascade = CascadeType.ALL)
+    @JsonManagedReference(value = "farmercontact")  // Ensures proper serialization
+    private List<ContactUs> queries;  // A farmer can have many queries
 }
-
-
-
-
 
 
 

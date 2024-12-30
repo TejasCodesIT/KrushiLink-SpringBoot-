@@ -78,7 +78,7 @@ public class FarmerServices {
     
 
      // Update a farmer by ID
-     public String updateFarmer(Long id, Farmer newFarmerData) {
+     public Farmer updateFarmer(Long id, Farmer newFarmerData) {
     	 
         if (farmerRepository.existsById(id)) {
         	
@@ -90,9 +90,9 @@ public class FarmerServices {
             
             farmerRepository.save(newFarmerData); // Save the updated data
             
-            return "Farmer updated successfully";
+            return newFarmerData;
         } else {
-            return "Farmer not found";
+            return null;
         }
     }
      

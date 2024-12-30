@@ -35,7 +35,7 @@ public class Buyer {
     @Column(unique = true)
     private String email;
     
-    private Long phone_number;
+    private Long phone;
 
     private String address;
     
