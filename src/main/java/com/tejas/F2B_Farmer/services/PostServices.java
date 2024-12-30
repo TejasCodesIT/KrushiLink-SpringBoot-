@@ -18,18 +18,29 @@ public class PostServices {
     public List<Post> getAllPosts() {
         return postRepository.findAll();
     }
+    
+    
 
     public Optional<Post> getPostById(Long id) {
         return postRepository.findById(id);
     }
+    
+    
+    
 
     public Post addPost(Post product) {
         return postRepository.save(product);
     }
+    
+    
+    
 
     public void deletePost(Long id) {
         postRepository.deleteById(id);
     }
+    
+    
+    
 
     public String updatePost(Long post_id, Post newproductData) {
         if (postRepository.existsById(post_id)) {
@@ -46,6 +57,8 @@ public class PostServices {
             
         }
     }
+    
+    
     
     
     public List<Post> findByFarmer(Long farmerid) {

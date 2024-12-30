@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tejas.F2B_Farmer.model.Farmer;
+import com.tejas.F2B_Farmer.request.EmailRequest;
 import com.tejas.F2B_Farmer.request.LoginRequest;
 import com.tejas.F2B_Farmer.services.FarmerServices;
 
@@ -26,6 +28,16 @@ public class FarmerController {
 
     @Autowired
     private FarmerServices farmerServices;
+    
+    @Autowired
+    private LoginController controller;
+    
+    
+    
+    @Autowired
+    private EmailRequest emailService;
+    
+   
     
    
     @GetMapping()
@@ -47,7 +59,9 @@ public class FarmerController {
     public boolean addFarmer(@RequestBody Farmer farmer) {
     	System.out.println("working");
     	farmerServices.addFarmer(farmer);
-         return true;
+    	
+    	    return sendThankYouEmail(farmer);
+    
     }
      
   
@@ -66,10 +80,34 @@ public class FarmerController {
     
     public boolean updateFarmer(@PathVariable Long id, @RequestBody Farmer updatedFarmer) {
     	 
-    	 farmerServices.updateFarmer(id, updatedFarmer);
+    	Farmer farmer =  farmerServices.updateFarmer(id, updatedFarmer);
+    	if(farmer!=null)
+    	controller.setDbfarmer(farmer);
 
      return true;
     }
+     
+     
+     public boolean sendThankYouEmail(Farmer farmer) {
+	        try {
+	            String subject = "Thank You for Registering!";
+	            String body = "Dear "+farmer.getFirstName()+" "+farmer.getLastName()+"  \r\n"
+	            		+ "\r\n"
+	            		+ "Thank you for  Registration! We’re thrilled to have you as part of our community.  \r\n"
+	            		+ "\r\n"
+	            		+ "For any questions, our support team is here to help at "+" farmerproject11@gmail.com"  +" \r\n"
+	            		+ "\r\n"
+	            		+ "Best regards,  \r\n"
+	            		+ "KrushiLink Team";
+	            
+	            
+	            
+	            emailService.sendEmail(farmer.getEmail(), body, subject);
+	            return true;
+	        } catch (Exception e) {
+	            return  false;
+	        }
+	    }
     
 }
 

@@ -11,8 +11,12 @@ import com.tejas.F2B_Farmer.services.BuyerServices;
 import com.tejas.F2B_Farmer.services.FarmerServices;
 
 import jakarta.servlet.http.HttpSession;
+import lombok.Getter;
+import lombok.Setter;
 
 @RestController
+@Getter
+@Setter
 @RequestMapping("/login")
 @CrossOrigin(origins = "http://localhost:4200/")
 public class LoginController {
@@ -33,7 +37,7 @@ public class LoginController {
     // Farmer login request
     @CrossOrigin(origins = "http://localhost:4200/")
     @PostMapping("farmer")
-    public Farmer farmerCredentials(@RequestBody LoginRequest loginRequest, HttpSession session) {
+    public Farmer farmerCredentials(@RequestBody LoginRequest loginRequest) {
     	
 
         
@@ -62,41 +66,37 @@ public class LoginController {
 
     // Buyer login request
     @PostMapping("buyer")
-    public Buyer buyerCredentials(@RequestBody LoginRequest loginRequest, HttpSession session) {
+    public Buyer buyerCredentials(@RequestBody LoginRequest loginRequest) {
       
-        Buyer dbBuyer = buyerServices.buyerlogin(loginRequest);
+        Buyer buyer = buyerServices.buyerlogin(loginRequest);
 
      
-        if (dbBuyer != null) {
-            session.setAttribute("Buyer", dbBuyer);
-        } else {
-            session.setAttribute("Buyer", null);
+        if (buyer != null) {
+        	 dbbuyer=buyer;
+        	 
+        	 System.out.println("Formm buyer credential : "+dbbuyer);
+        	 return dbbuyer;
+           
         }
+		return buyer; 
 
-        return dbBuyer; 
+  
     }
 
-   
+   //Get current farmer
     @GetMapping("currentFarmer")
     public Farmer getCurrentFarmer(HttpSession session) {
-      
-    	
-    	
-        Farmer currentFarmer = (Farmer) session.getAttribute("Farmer");
-        
-        System.out.println("Current Farmer in session: " + dbfarmer);
-        
-        
+    
         
         return dbfarmer; 
     }
 
     
     @GetMapping("currentBuyer")
-    public Buyer getCurrentBuyer(HttpSession session) {
+    public Buyer getCurrentBuyer() {
  
     	
-        Buyer currentBuyer = (Buyer) session.getAttribute("Buyer");
+        Buyer currentBuyer = dbbuyer;
         return currentBuyer; 
     }
     
@@ -111,6 +111,20 @@ public class LoginController {
     	//System.err.println(farmerServices.changePassword(changePassword, farmerid)+" from change pasword frm login");
     	
       return farmerServices.changePassword(changePassword, farmerid);
+    
+    	
+    	
+    }
+    
+    @CrossOrigin(origins = "http://localhost:4200/")
+    @PostMapping("buyer/changepassword")
+    public boolean changePasswordBuyer(@RequestBody ChangePassword changePassword) {
+    	
+    	
+    	Long buyerid = dbbuyer.getBuyerid();
+    	
+    	
+      return buyerServices.changePassword(changePassword, buyerid);
     
     	
     	
